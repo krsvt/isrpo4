@@ -1,0 +1,87 @@
+services:
+  swagger-ui:
+    container_name: lab-swagger
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8081:8080"
+    volumes:
+      # get from openapi directory
+      - ./openapi:/usr/share/nginx/html/openapi
+    environment:
+      SWAGGER_JSON: /openapi
+      URL: "openapi/patient.yaml"
+    networks:
+      - my-network
+
+  database:
+    container_name: lab-postgres
+    image: postgres:16
+    volumes:
+      - ./storage/pgdata:/var/lib/postgresql/data/
+      - ${PWD}/grafana-dashboards/:/var/lib/grafana/dashboards/
+
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${PROD_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${PROD_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${PROD_POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - my-network
+
+  app:
+    depends_on: [database]
+    container_name: lab-app
+    build:
+      context: . # This specifies the directory containing the Dockerfile
+    image: my-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      BIFF_PROFILE: dev
+    networks:
+      - my-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: "prometheus"
+    networks:
+      - my-network
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.listen-address=:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    restart: always
+    networks:
+      - my-network
+
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: victoriametrics
+    ports:
+      - "8428:8428"
+    volumes:
+      - ./victoriametrics-data:/victoria-metrics-data
+    restart: always
+    networks:
+      - my-network
+
+networks:
+  my-network: {}
