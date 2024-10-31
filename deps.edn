@@ -30,11 +30,25 @@
                                            :why         "SQL queries as data"
                                            :github      "https://github.com/seancorfield/honeysql"}
 
+
+        ;; org.slf4j/slf4j-api {:mvn/version "2.0.16"}
+        ;; ch.qos.logback/logback-core {:mvn/version "1.2.10"} ;; Или последняя версия
+        ;; ch.qos.logback/logback-classic {:mvn/version "1.2.10"} ;; Или последняя версия
+        ;; com.github.loki4j/loki-logback-appender {:mvn/version "1.4.0"}
         ;; Notes on logging: https://gist.github.com/jacobobryant/76b7a08a07d5ef2cc076b048d078f1f3
-        org.slf4j/slf4j-simple     {:mvn/version "2.0.0-alpha5"}
-        org.slf4j/log4j-over-slf4j {:mvn/version "1.7.36"}
-        org.slf4j/jul-to-slf4j     {:mvn/version "1.7.36"}
-        org.slf4j/jcl-over-slf4j   {:mvn/version "1.7.36"}}
+        ;; org.slf4j/slf4j-simple     {:mvn/version "2.0.0-alpha5"}
+        ;; org.slf4j/log4j-over-slf4j {:mvn/version "1.7.36"}
+        ;; org.slf4j/jul-to-slf4j     {:mvn/version "1.7.36"}
+        ;; org.slf4j/jcl-over-slf4j   {:mvn/version "1.7.36"}
+        org.slf4j/slf4j-api                           {:mvn/version "2.0.9"}
+        ch.qos.logback/logback-classic                {:mvn/version "1.4.11"}
+        ;; net.logstash.logback/logstash-logback-encoder {:mvn/version "7.4"}
+        ;; ch.codesmith/logger                           {:mvn/version "0.7.108"}
+        com.github.loki4j/loki-logback-appender {:mvn/version "1.5.2"}
+
+
+
+        }
  :aliases
  {:dev {:extra-deps {com.biffweb/tasks {:git/url "https://github.com/jacobobryant/biff", :git/sha "ada149e", :git/tag "v1.8.2", :deps/root "libs/tasks"}}
         :extra-paths ["dev" "test"]

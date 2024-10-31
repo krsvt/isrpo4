@@ -3,6 +3,7 @@
    [lab.util.postgres :as pg]
    [medley.core :as medley]
    [clojure.string :as str]
+   [clojure.tools.logging :as log]
    [iapetos.collector.ring :as ring]
    [lab.metrics :as metrics]))
 
@@ -24,6 +25,8 @@
 
 (defn get-patients [{:keys [biff/ds]}]
   (metrics/inc-get-patient)
+  (log/info "get patients info")
+  (log/error "get patients error")
   {:status 200
    :body (mapv map-json-out (pg/patients ds))})
 

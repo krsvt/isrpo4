@@ -67,6 +67,10 @@
                            components)]
     (reset! system new-system)
     (generate-assets! new-system)
+    (log/debug "debug message")
+    (log/info "info message")
+    (log/warn "warn message")
+    (log/error "error message")
     (log/info "System started.")
     (log/info "Go to" (:biff/base-url new-system))
     new-system))
